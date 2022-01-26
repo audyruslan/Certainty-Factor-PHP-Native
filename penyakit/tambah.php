@@ -11,7 +11,7 @@ function tambah_penyakit($data)
     $srn_penyakit = $data['srn_penyakit'];
 
     // Upload Gambar
-    $gambar = upload_gambar();
+    $gambar = upload_gambarPenyakit();
 
     $query = "INSERT INTO penyakit
                 (nama_penyakit,det_penyakit,srn_penyakit,gambar)

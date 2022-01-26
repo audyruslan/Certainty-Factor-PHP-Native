@@ -4,7 +4,7 @@ if (!isset($_SESSION["username"])) {
     header("Location: login.php");
     exit;
 }
-$title = "Hama & Penyakit - Certainty Factor (CF)";
+$title = "Penyakit - Certainty Factor (CF)";
 require 'layouts/header.php';
 require 'layouts/navbar.php';
 require 'functions.php';
@@ -20,12 +20,12 @@ require 'layouts/sidebar.php';
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Data Hama & Penyakit</h1>
+                    <h1 class="m-0">Data Penyakit</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-                        <li class="breadcrumb-item active">Hama & Penyakit</li>
+                        <li class="breadcrumb-item active">Penyakit</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->

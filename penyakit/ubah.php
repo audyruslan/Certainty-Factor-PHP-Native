@@ -24,7 +24,7 @@ function ubah_penyakit($data)
         if (file_exists("../assets/img/penyakit/$gambar")) {
             unlink("../assets/img/penyakit/$gambar");
         }
-        $gambar = upload_gambar();
+        $gambar = upload_gambarPenyakit();
     }
 
     $query = "UPDATE penyakit SET

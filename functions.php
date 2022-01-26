@@ -78,11 +78,19 @@ function hapus_post($id)
     return mysqli_affected_rows($conn);
 }
 
-// Hapus Data Hasil Riwayat
-function hapus_riwayat($id)
+// Hapus Data Hasil Riwayat Hama
+function hapus_riwayatHama($id)
 {
     global $conn;
-    mysqli_query($conn, "DELETE FROM hasil WHERE id_hasil = '$id'");
+    mysqli_query($conn, "DELETE FROM hasil_hama WHERE id_hasil = '$id'");
+    return mysqli_affected_rows($conn);
+}
+
+// Hapus Data Hasil Riwayat Penyakit
+function hapus_riwayatPenyakit($id)
+{
+    global $conn;
+    mysqli_query($conn, "DELETE FROM hasil_penyakit WHERE id_hasil = '$id'");
     return mysqli_affected_rows($conn);
 }
 

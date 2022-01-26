@@ -1,5 +1,5 @@
 <?php
-$title = "Diagnosa Penyakit - Certainty Factor (CF)";
+$title = "Diagnosa Hama - Certainty Factor (CF)";
 require 'layouts/header.php';
 require 'layouts/navbar.php';
 require 'layouts/sidebar.php';
@@ -12,12 +12,12 @@ require 'functions.php';
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Diagnosa Penyakit</h1>
+                    <h1 class="m-0">Diagnosa Hama</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-                        <li class="breadcrumb-item active">Diagnosa Penyakit</li>
+                        <li class="breadcrumb-item active">Diagnosa Hama</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -33,7 +33,7 @@ require 'functions.php';
                 date_default_timezone_set("Asia/Jakarta");
                 $inptanggal = date('Y-m-d H:i:s');
 
-                $arbobot = array('0', '1', '0.8', '0.6', '0.4', '-0.2', '-0.4', '-0.6', '-0.8', '-1');
+                $arbobot = array('1', '0.8', '0.6', '0.4', '0.2', '0');
                 $argejala = array();
 
                 for ($i = 0; $i < count($_POST['kondisi']); $i++) {
@@ -43,12 +43,12 @@ require 'functions.php';
                     }
                 }
 
-                $sqlkondisi = mysqli_query($conn, "SELECT * FROM kondisi_penyakit order by id+0");
+                $sqlkondisi = mysqli_query($conn, "SELECT * FROM kondisi_hama order by id+0");
                 while ($rkondisi = mysqli_fetch_array($sqlkondisi)) {
                     $arkondisitext[$rkondisi[0]] = $rkondisi[1];
                 }
 
-                $sqlpkt = mysqli_query($conn, "SELECT * FROM penyakit order by kode_penyakit+0");
+                $sqlpkt = mysqli_query($conn, "SELECT * FROM hama order by kode_hama+0");
                 while ($rpkt = mysqli_fetch_array($sqlpkt)) {
                     $arpkt[$rpkt[0]] = $rpkt[1];
                     $ardpkt[$rpkt[0]] = $rpkt[2];
@@ -59,54 +59,66 @@ require 'functions.php';
                 //print_r($arkondisitext);
                 // -------- perhitungan certainty factor (CF) ---------
                 // --------------------- START ------------------------
-                $sqlpenyakit = mysqli_query($conn, "SELECT * FROM penyakit order by kode_penyakit");
-                $arpenyakit = array();
-                while ($rpenyakit = mysqli_fetch_array($sqlpenyakit)) {
-                    $cftotal_temp = 0;
-                    $cf = 0;
-                    $sqlgejala = mysqli_query($conn, "SELECT * FROM pengetahuan_penyakit where kode_penyakit=$rpenyakit[0]");
-                    $cflama = 0;
-                    while ($rgejala = mysqli_fetch_array($sqlgejala)) {
+                 $sqlhama = mysqli_query($conn, "SELECT * FROM hama order by kode_hama");
+                    $arhama = array();
+                    while ($rhama = mysqli_fetch_array($sqlhama)) {
+                        $cftotal_temp = 0;
+                        $cf = 0;
+                        $sqlgejala = mysqli_query($conn, "SELECT * FROM pengetahuan_hama WHERE kode_hama=$rhama[kode_hama]");
+                        $cflama = 0;
+                        while ($rgejala = mysqli_fetch_array($sqlgejala)) {
                         $arkondisi = explode("_", $_POST['kondisi'][0]);
                         $gejala = $arkondisi[0];
+                        $tes = $rgejala[1];
 
-                        for ($i = 0; $i < count($_POST['kondisi']); $i++) {
-                            $arkondisi = explode("_", $_POST['kondisi'][$i]);
-                            $gejala = $arkondisi[0];
-                            if ($rgejala[1] == $gejala) {
+                            for ($i = 0; $i < count($_POST['kondisi']); $i++) {
+                                $arkondisi = explode("_", $_POST['kondisi'][$i]);
+                                $gejala = $arkondisi[0];
+                                if ($rgejala[1] == $gejala) {
                                 $cf = ($rgejala[3] - $rgejala[4]) * $arbobot[$arkondisi[1]];
                                 if (($cf >= 0) && ($cf * $cflama >= 0)) {
                                     $cflama = $cflama + ($cf * (1 - $cflama));
                                 }
                                 if ($cf * $cflama < 0) {
-                                    $cflama = ($cflama + $cf) / (1 -  Min(abs($cflama), abs($cf)));
+                                    $cflama = ($cflama + $cf) / (1 - Min(abs($cflama), abs($cf)));
                                 }
                                 if (($cf < 0) && ($cf * $cflama >= 0)) {
                                     $cflama = $cflama + ($cf * (1 + $cflama));
                                 }
+                                }
                             }
                         }
+                        if ($cflama > 0) {
+                        $arhama += array($rhama[1] => number_format($cflama, 4));
+                        }
                     }
-                    if ($cflama > 0) {
-                        $arpenyakit += array($rpenyakit[0] => number_format($cflama, 4));
+
+                    arsort($arhama);
+
+                    $inpgejala = serialize($argejala);
+                    $inphama = serialize($arhama);
+
+                    $np1 = 0;
+                    foreach ($arhama as $key1 => $value1) {
+                        $np1++;
+                        $idpkt1[$np1] = $key1;
+                        $vlpkt1[$np1] = $value1;
                     }
-                }
 
-                arsort($arpenyakit);
-
-                $inpgejala = serialize($argejala);
-                $inppenyakit = serialize($arpenyakit);
-
-                $np1 = 0;
-                foreach ($arpenyakit as $key1 => $value1) {
-                    $np1++;
-                    $idpkt1[$np1] = $key1;
-                    $vlpkt1[$np1] = $value1;
-                }
-
-
-                $tes = mysqli_query($conn, "INSERT INTO hasil_penyakit (tanggal,gejala,penyakit,hasil_id,hasil_nilai) 
-	        VALUES('$inptanggal','$inpgejala','$inppenyakit','$idpkt1[1]','$vlpkt1[1]')");
+                    mysqli_query($conn, "INSERT INTO hasil_hama(
+                                tanggal,
+                                ghama,
+                                hama,
+                                hasil_id,
+                                hasil_nilai
+                                ) 
+                            VALUES(
+                                '$inptanggal',
+                                '$inpgejala',
+                                '$inphama',
+                                '$idpkt1[1]',
+                                '$vlpkt1[1]'
+                                )");
 
                 // --------------------- END -------------------------  
             ?>
@@ -127,7 +139,7 @@ require 'functions.php';
                                 $kondisi = $value;
                                 $ig++;
                                 $gejala = $key;
-                                $sql4 = mysqli_query($conn, "SELECT * FROM gejala where kode_gejala = '$key'");
+                                $sql4 = mysqli_query($conn, "SELECT * FROM gejala_hama where kode_ghama = '$key'");
                                 $r4 = mysqli_fetch_array($sql4);
                             ?>
                                 <tr>
@@ -145,14 +157,14 @@ require 'functions.php';
 
                 <?php
                 $np = 0;
-                foreach ($arpenyakit as $key => $value) {
+                foreach ($arhama as $key => $value) {
                     $np++;
                     $idpkt[$np] = $key;
                     $nmpkt[$np] = $arpkt[$key];
                     $vlpkt[$np] = $value;
                 }
                 if ($argpkt[$idpkt[1]]) {
-                    $gambar = "assets/img/penyakit/" . $argpkt[$idpkt[1]];
+                    $gambar = "assets/img/hama/" . $argpkt[$idpkt[1]];
                 } else {
                     $gambar = "assets/img/noimage.png";
                 }
@@ -163,7 +175,7 @@ require 'functions.php';
                             <div class="col-8">
                                 <h4 class="mt-3 mb-4">Hasil Diagnosa</h4>
                                 <div class="callout callout-secondary">
-                                    <h5>Jenis Penyakit yang diderita Adalah</h5>
+                                    <h5>Jenis hama yang diderita Adalah</h5>
 
                                     <h3 class="text text-success"><b><?= $nmpkt[1]; ?> / <?= round($vlpkt[1], 2); ?> (<?= $vlpkt[1]; ?>)</b></h3>
                                 </div>
@@ -254,7 +266,7 @@ require 'functions.php';
                                 </thead>
                                 <?php
                                 $i = 1;
-                                $sql3 = mysqli_query($conn, "SELECT * FROM gejala_penyakit order by kode_gpenyakit");
+                                $sql3 = mysqli_query($conn, "SELECT * FROM gejala_hama order by kode_ghama");
                                 while ($r3 = mysqli_fetch_array($sql3)) {
                                 ?>
                                     <tr>
@@ -265,11 +277,11 @@ require 'functions.php';
                                             <select class="form-control" name="kondisi[]" id="sl<?= $i; ?>" class="opsikondisi">
                                                 <option data-id="0" value="0">Pilih jika sesuai</option>
                                                 <?php
-                                                $s = "SELECT * FROM kondisi_penyakit ORDER BY id";
+                                                $s = "SELECT * FROM kondisi_hama ORDER BY id";
                                                 $q = mysqli_query($conn, $s) or die($s);
                                                 while ($rw = mysqli_fetch_array($q)) {
                                                 ?>
-                                                    <option data-id="<?= $rw['id']; ?>" value="<?= $r3['kode_gejala'] . '_' . $rw['id']; ?>"><?= $rw['kondisi']; ?></option>
+                                                    <option data-id="<?= $rw['id']; ?>" value="<?= $r3['kode_ghama'] . '_' . $rw['id']; ?>"><?= $rw['kondisi']; ?></option>
                                                 <?php
                                                 }
                                                 ?>

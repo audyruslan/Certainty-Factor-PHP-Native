@@ -43,23 +43,52 @@
                   <li class="nav-header">Menu</li>
                   <?php
                     if (empty($_SESSION["username"])) {
-                    ?>
-                      <li class="nav-item">
-                          <a href="diagnosa.php" class="nav-link">
+                    ?> <li class="nav-item">
+                          <a href="#" class="nav-link">
+                              <i class="nav-icon fas fa-search-plus"></i>
+                            <p>
+                              Diagnosa Hama
+                              <i class="right fas fa-angle-left"></i>
+                            </p>
+                          </a>
+                          <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                              <a href="diagnosa_hama.php" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Diagnosa</p>
+                              </a>
+                            </li>
+                            <li class="nav-item">
+                              <a href="riwayat_hama.php" class="nav-link">
+                              <i class="nav-icon fas fa-clock"></i>
+                                <p>Riwayat</p>
+                              </a>
+                            </li>
+                          </ul>
+                        </li>
+                          <li class="nav-item">
+                            <a href="#" class="nav-link">
                               <i class="nav-icon fas fa-search-plus"></i>
                               <p>
-                                  Diagnosa
+                                Diagnosa Penyakit
+                                <i class="right fas fa-angle-left"></i>
                               </p>
-                          </a>
-                      </li>
-                      <li class="nav-item">
-                          <a href="riwayat.php" class="nav-link">
+                            </a>
+                            <ul class="nav nav-treeview">
+                              <li class="nav-item">
+                                <a href="diagnosa.php" class="nav-link">
+                                  <i class="far fa-circle nav-icon"></i>
+                                  <p>Diagnosa</p>
+                                </a>
+                              </li>
+                              <li class="nav-item">
+                                <a href="riwayat.php" class="nav-link">
                               <i class="nav-icon fas fa-clock"></i>
-                              <p>
-                                  Riwayat
-                              </p>
-                          </a>
-                      </li>
+                                  <p>Riwayat</p>
+                                </a>
+                              </li>
+                            </ul>
+                          </li>
                       <li class="nav-item">
                           <a href="keterangan.php" class="nav-link">
                               <i class="nav-icon fas fa-comments"></i>
@@ -118,13 +147,13 @@
               </li>
                   <li class="nav-item">
                 <a href="kondisi_hama.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
+                    <i class="nav-icon fas fa-thermometer"></i>
                   <p>Kondisi</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="pengetahuan_hama.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
+                  <i class="nav-icon fas fa-flask"></i>
                   <p>Pengetahuan</p>
                 </a>
               </li>
@@ -133,13 +162,19 @@
                   <li class="nav-header">Menu Penyakit</li>
         <li class="nav-item">
             <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-chart-pie"></i>
+              <i class="nav-icon fas fa-disease"></i>
               <p>
                Menu Penyakit
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="penyakit.php" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Penyakit</p>
+                </a>
+              </li>
               <li class="nav-item">
                 <a href="gejala.php" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
@@ -148,35 +183,19 @@
               </li>
               <li class="nav-item">
                 <a href="kondisi.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
+                    <i class="nav-icon fas fa-thermometer"></i>
                   <p>Kondisi</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="pages/charts/uplot.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
+                    <i class="nav-icon fas fa-flask"></i>
                   <p>Pengetahuan</p>
                 </a>
               </li>
             </ul>
           </li>
                   <li class="nav-header">Lainnya</li>
-                      <li class="nav-item">
-                          <a href="kondisi.php" class="nav-link">
-                              <i class="nav-icon fas fa-thermometer"></i>
-                              <p>
-                                  Kondisi
-                              </p>
-                          </a>
-                      </li>
-                      <li class="nav-item">
-                          <a href="pengetahuan.php" class="nav-link">
-                              <i class="nav-icon fas fa-flask"></i>
-                              <p>
-                                  Pengetahuan
-                              </p>
-                          </a>
-                      </li>
                       <li class="nav-item">
                           <a href="post.php" class="nav-link">
                               <i class="nav-icon fas fa-file"></i>

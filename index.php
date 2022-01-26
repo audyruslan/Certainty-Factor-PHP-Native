@@ -44,7 +44,7 @@ require 'layouts/sidebar.php';
               <span class="info-box-text">Total Gejala</span>
               <span class="info-box-number">
                 <?php
-                $mhs = mysqli_num_rows(mysqli_query($conn, "SELECT * FROM gejala"));
+                $mhs = mysqli_num_rows(mysqli_query($conn, "SELECT * FROM gejala_hama"));
                 ?>
                 <?= $mhs; ?>
                 <small>Gejala</small>
@@ -62,7 +62,7 @@ require 'layouts/sidebar.php';
               <span class="info-box-text">Total Penyakit</span>
               <span class="info-box-number">
                 <?php
-                $penyakit = mysqli_num_rows(mysqli_query($conn, "SELECT * FROM penyakit"));
+                $penyakit = mysqli_num_rows(mysqli_query($conn, "SELECT * FROM hama"));
                 ?>
                 <?= $penyakit; ?>
                 <small>Penyakit</small>
@@ -80,7 +80,7 @@ require 'layouts/sidebar.php';
               <span class="info-box-text">Total Pengetahuan</span>
               <span class="info-box-number">
                 <?php
-                $mhs = mysqli_num_rows(mysqli_query($conn, "SELECT * FROM basis_pengetahuan"));
+                $mhs = mysqli_num_rows(mysqli_query($conn, "SELECT * FROM pengetahuan_hama"));
                 ?>
                 <?= $mhs; ?>
                 <small>Pengetahuan</small>
